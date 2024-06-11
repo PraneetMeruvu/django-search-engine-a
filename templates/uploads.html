@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="display-4 text-center my-5">File Uploader</h1>
+        <main>
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" id="message-{{ forloop.counter }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="upload-container">
+                <form method="post" enctype="multipart/form-data" class="upload-form">
+                    {% csrf_token %}
+                    <div class="drag-area">
+                        <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <header>Drag and Drop files here or click to select</header>
+                        <span>or</span>
+                        <button type="button" class="btn btn-light" onclick="document.getElementById('id_files').click();">Browse Files</button>
+                        <input type="file" name="files" multiple="" id="id_files" style="display: none;">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+
+            <aside> 
+                <h2>Uploaded Files</h2> 
+                <ul class="list-group">
+                    {% for file in files|slice:":10" %}
+                        <li class="list-group-item">{{ file.title }}</li>
+                    {% endfor %}
+                </ul>
+            </aside>
+        </main>
+    </div>
+    <script src="{% static 'script.js' %}"></script>   
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% load static %}
+{% load custom_filter %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="display-4 text-center my-5">Search Results</h1>
+        <form method="GET" action="{% url 'search_files' %}" class="search-form">
+            <input class="form-control mr-sm-2" type="text" name="query" placeholder="Enter search query" style="display: inline-block; width: auto;">
+            <button type="submit" class="btn btn-secondary">Search</button>
+        </form>
+
+        <aside>
+            <h2>Showing Results for "{{ query }}"</h2>
+            <ul class="list-group">
+                {% for file in files %}
+                <li class="list-group-item">
+                    <h3>{{ file.title }}</h3>
+                    <p>{{ file.content|highlight_query:request.GET.query|safe }}</p>
+                </li>
+                {% empty %}
+                <li class="list-group-item">No files match the query.</li>
+                {% endfor %}
+            </ul>
+        </aside>
+    </div>
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
